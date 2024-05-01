@@ -10,6 +10,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the changed files back to the repository.
+      contents: write
+
     strategy:
       matrix:
         node-version: [18.x]
@@ -24,10 +28,4 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
 
-      - name: Commit and push changes
-        run: |
-          git config --global user.name 'Felipe'
-          git config --global user.email 'flpmireles@gmail.com'
-          git add .
-          git commit -m "Build artifacts"
-          git push origin main
+      - uses: stefanzweifel/git-auto-commit-action@v5
